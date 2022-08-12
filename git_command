@@ -1,0 +1,6 @@
+git add index.js
+git commit -m "new updates"
+git status
+git push 
+git diff index.js
+git push origin main
