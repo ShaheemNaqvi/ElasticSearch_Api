@@ -1,6 +1,6 @@
 var client = require('../connection/connect');
 
-FindRiskstatId = (req, res) => {
+FindRiskstatId = async (req, res) => {
     let risk_stats;
     client.get({
         index: 'risk_stats',

@@ -1,5 +1,5 @@
 {
-    "name": "api_no_db",
+    "name": "deep-eye-api",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -8,7 +8,7 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
-    "author": "",
+    "author": "ShaheemNaqvi",
     "license": "ISC",
     "dependencies": {
         "@elastic/elasticsearch": "^8.2.1",

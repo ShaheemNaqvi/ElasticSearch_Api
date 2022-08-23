@@ -9,7 +9,7 @@ function apiErrorHandler(err,req,res,next) {
         return;
     }
 
-    res.status(500).json('Internal erver Error')
+    res.status(500).json('Internal server Error')
 }
 
 module.exports = apiErrorHandler;
