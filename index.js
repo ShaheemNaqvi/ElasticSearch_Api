@@ -1,4 +1,3 @@
-// Import packages
 var elasticsearch = require('elasticsearch')
 const express = require('express')
 const morgan = require('morgan')
@@ -8,6 +7,8 @@ const apiErrorHandler = require('./error/apiErrorHandler');
 const client =require('./connection/connect');
 const traffic_routes = require('./routes/traffic.routes');
 const protocol_routes = require('./routes/protocol.routes');
+const search_routes = require('./routes/search.routes');
+
 //Paths
 const path = require('path');
 const { nextTick, connected } = require('process');
@@ -22,15 +23,10 @@ app.use(express.static(distPath))
 // To allow cross origin connections so that our webapp can connect to our server
 app.use(cors());
 
+app.use('/search', search_routes);
 app.use('/traffic_stats', traffic_routes);
 app.use('/protocol_stats', protocol_routes);
 app.use('/', router);
-// helper function to parse elasticsearch response
-const parseElasticResponse = (elasticResponse) => {
-  const responseHits = elasticResponse.hits.hits;
-  const result = responseHits.map((hit) => hit._source);
-  return result;
-};
 
 client.ping({
     requestTimeout: 30000,
@@ -52,7 +48,12 @@ app.get('*', (request, response) => {
 });
 
 app.use(apiErrorHandler);
-// Starting server
+
 app.listen('6000');
 console.log('server running on localhost:6000')
-//client.close();
+
+process.on('SIGINT', function() {
+    console.log("\n Caught interrupt signal ---> client close");
+    client.close();
+    process.exit();
+});

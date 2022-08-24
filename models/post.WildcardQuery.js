@@ -7,20 +7,25 @@ const parseElasticResponse = (elasticResponse) => {
   };
 
 
-const SimpleSearch = async (_index , _string ,phrase) => {
+const Wildcard = async (_index , _string ,phrase) => {
     const hits = [];
     //var s = '"'+ _string + '"';
-    console.log(phrase);
+    //console.log(s);
     const searchResult = await client.search({ 
         index: _index,
         type: '_doc',
         body: {
-          query: {
-            match: { _string : phrase }
-          },
-          // fields: ["protocol"]
-        //   from: 1,
-        //   size: 1
+        query: {
+            wildcard : {
+                    "authors" : "t*"
+                }
+            },
+            _source: ["title", "authors"],
+            highlight: {
+                fields : {
+                    "authors" : {}
+                }
+            }
         }
       })
       .catch((e) =>  {
@@ -43,8 +48,24 @@ const SimpleSearch = async (_index , _string ,phrase) => {
     })
    let result = searchResult;
     return {
-        result: result,
+        result: parseElasticResponse(result),
     };
 }
 
-module.exports = SimpleSearch;
+module.exports = Wildcard;
+
+
+// POST /bookdb_index/book/_search
+// {
+//     "query": {
+//         "wildcard" : {
+//             "authors" : "t*"
+//         }
+//     },
+//     "_source": ["title", "authors"],
+//     "highlight": {
+//         "fields" : {
+//             "authors" : {}
+//         }
+//     }
+// }

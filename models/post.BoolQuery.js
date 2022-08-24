@@ -7,22 +7,28 @@ const parseElasticResponse = (elasticResponse) => {
   };
 
 
-const SimpleSearch = async (_index , _string ,phrase) => {
+const bool = async (_index , _string ,phrase) => {
     const hits = [];
-    //var s = '"'+ _string + '"';
-    console.log(phrase);
     const searchResult = await client.search({ 
         index: _index,
         type: '_doc',
         body: {
-          query: {
-            match: { _string : phrase }
-          },
-          // fields: ["protocol"]
-        //   from: 1,
-        //   size: 1
-        }
-      })
+            query: {
+                bool: {
+                  must: {
+                    bool : { 
+                      should: [
+                        { match: { title: "Elasticsearch" }},
+                        { match: { title: "Solr" }} 
+                      ],
+                      must: { match: { "authors": "clinton gormely" }} 
+                    }
+                  },
+                  must_not: { match: {"authors": "radu gheorge" }}
+                }
+              }
+      }
+    })
       .catch((e) =>  {
         if (e instanceof TypeError) {
           console.log('errr', e) 
@@ -43,8 +49,27 @@ const SimpleSearch = async (_index , _string ,phrase) => {
     })
    let result = searchResult;
     return {
-        result: result,
+        result: parseElasticResponse(result),
     };
 }
 
-module.exports = SimpleSearch;
+module.exports = bool;
+
+
+// POST /bookdb_index/book/_search
+// {
+//   "query": {
+//     "bool": {
+//       "must": {
+//         "bool" : { 
+//           "should": [
+//             { "match": { "title": "Elasticsearch" }},
+//             { "match": { "title": "Solr" }} 
+//           ],
+//           "must": { "match": { "authors": "clinton gormely" }} 
+//         }
+//       },
+//       "must_not": { "match": {"authors": "radu gheorge" }}
+//     }
+//   }
+// }

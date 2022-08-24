@@ -7,20 +7,22 @@ const parseElasticResponse = (elasticResponse) => {
   };
 
 
-const SimpleSearch = async (_index , _string ,phrase) => {
+const multimatch = async (_index , _string ,phrase) => {
     const hits = [];
     //var s = '"'+ _string + '"';
-    console.log(phrase);
+    //console.log(s);
     const searchResult = await client.search({ 
         index: _index,
-        type: '_doc',
+        //type: '_doc',
         body: {
-          query: {
-            match: { _string : phrase }
-          },
-          // fields: ["protocol"]
-        //   from: 1,
-        //   size: 1
+            query: {
+                multi_match : {
+                    query : phrase,
+                    fields: ["title", "summary^3"],
+                    type: "phrase_prefix"
+                }
+            },
+            _source: ["title", "summary", "publish_date"]
         }
       })
       .catch((e) =>  {
@@ -43,8 +45,20 @@ const SimpleSearch = async (_index , _string ,phrase) => {
     })
    let result = searchResult;
     return {
-        result: result,
+        result: parseElasticResponse(result),
     };
 }
 
-module.exports = SimpleSearch;
+module.exports = multimatch;
+
+
+// POST /bookdb_index/book/_search
+// {
+//     "query": {
+//         "multi_match" : {
+//             "query" : "elasticsearch guide",
+//             "fields": ["title", "summary^3"]
+//         }
+//     },
+//     "_source": ["title", "summary", "publish_date"]
+// }
