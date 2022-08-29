@@ -6,6 +6,10 @@ var client = new elasticsearch.Client({
 });
 
 
+<<<<<<< HEAD
 
 
 module.exports = client
+=======
+module.exports = client
+>>>>>>> cea81759eda250c19ecea47f66f546bfcbf90c20
