@@ -13,6 +13,19 @@ router.get('/', (req, res) => {
 });
 // route to risk
 router.get('/risk_stats/:id', FindRiskstatId )
+
+// route to protocol list
+router.get('v1/protocol', async (req, res) => {
+    const phraseSearch  = require('../Task/FindStatsById');
+    const data = await phraseSearch( 'protocol_stats' , 'id');
+    res.json(data);
+});
+// route to protocol metadata
+router.get('v1/protocol/:id', async (req, res) => {
+    const phraseSearch  = require('../Task/FindStatsById');
+    const data = await phraseSearch( 'protocol_stats' , req.params.id);
+    res.json(data);
+});
 //health
 router.get("/health", function (req, res) {
     client.cluster.health({},function(err,resp,status) {  

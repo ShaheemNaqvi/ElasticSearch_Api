@@ -16,7 +16,7 @@ const SimpleSearch = async (_index , _string ,phrase) => {
         type: '_doc',
         body: {
           query: {
-            match: { _string : phrase }
+            match: { "TCP Packets" : phrase }
           },
           // fields: ["protocol"]
         //   from: 1,
