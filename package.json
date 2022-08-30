@@ -12,7 +12,8 @@
     "license": "ISC",
     "dependencies": {
         "@elastic/elasticsearch": "^8.2.1",
-        "express": "^4.16.3"
+        "express": "^4.16.3",
+        "undici": "^5.10.0"
     },
     "devDependencies": {
         "morgan": "^1.10.0",
