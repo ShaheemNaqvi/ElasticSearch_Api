@@ -2,6 +2,7 @@ var elasticsearch = require('elasticsearch')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require("cors");
+const bodyParser = require('body-parser');
 const router = require('./routes/index');
 const apiErrorHandler = require('./error/apiErrorHandler');
 const client =require('./connection/connect');
@@ -22,6 +23,10 @@ app.use(express.json());
 app.use(express.static(distPath))
 // To allow cross origin connections so that our webapp can connect to our server
 app.use(cors());
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+const server = require('http').createServer(app);
 
 app.use('/search', search_routes);
 app.use('/traffic_stats', traffic_routes);
@@ -48,8 +53,10 @@ app.get('*', (request, response) => {
 });
 
 app.use(apiErrorHandler);
-
-app.listen('6000');
+server.on('listening',()=>{
+    console.log('Server is running');
+});
+server.listen('6000');
 console.log('server running on localhost:6000')
 
 process.on('SIGINT', function() {

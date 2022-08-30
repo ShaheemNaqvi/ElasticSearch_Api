@@ -1,6 +1,7 @@
 const express = require('express');
 const ApiError = require('../error/ApiError');
 var client = require('../connection/connect');
+const getindicesData = require('../models/getIndexdata');
 const path = require('path');
 
 const router = express.Router();
@@ -11,6 +12,21 @@ const parseElasticResponse = (elasticResponse) => {
     const result = responseHits.map((hit) => hit._source);
     return result;
 };
+
+// Get elastic indices data 
+router.get('/alldata/:index', (req, res) => { //done
+    getindicesData.getEachIndicesData(req, res);
+ })
+// Get single elastic indices data 
+router.post('/single/:index', (req, res) => { //done
+    getindicesData.getEachIndicesSingleRecord(req, res);
+ })
+
+ // Get repeated field data from the indices //students
+router.get('/repeated/:index', (req, res) => {
+    getindicesData.getRepeatedFieldIndicesData(req, res);
+ })
+
 
 //searching on query
 router.get('/:index/:type', async (req, res) => {

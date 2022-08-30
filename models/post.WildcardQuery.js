@@ -10,7 +10,6 @@ const parseElasticResponse = (elasticResponse) => {
 const Wildcard = async (_index , _string ,phrase) => {
     const hits = [];
     //var s = '"'+ _string + '"';
-    //console.log(s);
     const searchResult = await client.search({ 
         index: _index,
         type: '_doc',

@@ -7,6 +7,14 @@ const path = require('path');
 const router = express.Router();
 
 const distPath = '/home/dpilab/api';
+
+
+const parseElasticResponse = (elasticResponse) => {
+    const responseHits = elasticResponse.hits.hits;
+    const result = responseHits.map((hit) => hit._source);
+    return result;
+  };
+
 //home
 router.get('/', (req, res) => {
     res.sendFile(path.join(distPath, 'home.html'))
@@ -16,13 +24,13 @@ router.get('/risk_stats/:id', FindRiskstatId )
 
 // route to protocol list
 router.get('v1/protocol', async (req, res) => {
-    const phraseSearch  = require('../Task/FindStatsById');
+    const phraseSearch  = require('../Task/FindDocById');
     const data = await phraseSearch( 'protocol_stats' , 'id');
     res.json(data);
 });
 // route to protocol metadata
 router.get('v1/protocol/:id', async (req, res) => {
-    const phraseSearch  = require('../Task/FindStatsById');
+    const phraseSearch  = require('../Task/FindDocById');
     const data = await phraseSearch( 'protocol_stats' , req.params.id);
     res.json(data);
 });
@@ -56,6 +64,37 @@ router.get("/indiciesstat", function (req, res) {
             indicies: indicies
         });
     });
+});
+
+router.get("/elastic", async (req, res, next) => {
+    try {
+      const { text = "" } = req.query;
+      const response = await client.search(
+        {
+          index: "protocol_stats",
+          from: 0,
+          body: {
+            query: {
+              multi_match: {
+                query: text,
+                fields: ["packets"],
+                type: "phrase_prefix"
+              },
+            },
+          },
+        },
+        {
+          ignore: [404],
+          maxRetries: 3,
+        }
+      );
+      res.json({
+        message: "Searched Successfully",
+        records: parseElasticResponse(response),
+      });
+    } catch (err) {
+      next(err);
+    }
 });
 
 module.exports =router;

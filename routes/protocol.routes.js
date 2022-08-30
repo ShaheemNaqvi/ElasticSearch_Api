@@ -9,9 +9,8 @@ const router = express.Router();
 //router.get('/:id', FindstatsById )
 
 router.get('/:id', async (req, res) => {
-    const phraseSearch  = require('../Task/FindStatsById');
-    const data = await phraseSearch( 'protocol_stats' , req.params.id);
-    res.json(data);
-    });
+    const phraseSearch  = require('../Task/FindDocById');
+    phraseSearch( req, res,'protocol_stats' );
+});
 
 module.exports =router;
