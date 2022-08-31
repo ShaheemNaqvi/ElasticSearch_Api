@@ -77,7 +77,7 @@ router.get("/elastic", async (req, res, next) => {
             query: {
               multi_match: {
                 query: text,
-                fields: ["packets"],
+                fields: ["packets", "protocol", "packets"],
                 type: "phrase_prefix"
               },
             },

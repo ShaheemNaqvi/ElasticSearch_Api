@@ -1,14 +1,14 @@
 var client = require('../connection/connect');
 
 
-const phraseSearch = async (_index, _type, phrase) => {
+const phraseSearch = async (_index, phrase) => {
     const hits = [];
   
     // only string values are searchable
     const searchResult = await client
       .search({
         index: _index,
-        type: _type,
+        type: '_doc',
         body: {
           query: {
             multi_match: {
