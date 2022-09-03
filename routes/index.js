@@ -17,7 +17,10 @@ const parseElasticResponse = (elasticResponse) => {
 
 //home
 router.get('/', (req, res) => {
-    res.sendFile(path.join(distPath, 'home.html'))
+    //res.sendFile(path.join(distPath, 'home.html'))
+    res.status(200).send({
+      message:'api is working'
+  });
 });
 // route to risk
 router.get('/risk_stats/:id', FindRiskstatId )

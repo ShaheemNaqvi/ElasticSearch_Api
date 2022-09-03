@@ -47,7 +47,7 @@ client.ping({
 
 // respond to every other request with index.html
 app.get('*', (request, response) => {
-    response.status(400).send({
+    response.status(200).send({
         message:'default route'
     });
 });
