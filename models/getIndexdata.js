@@ -11,10 +11,11 @@ exports.getEachIndicesData = function(req, res, next) {
     client.search({
         index: req.params["index"],
         body: {
-            "from" : 0, "size" : 100,
+            from : 0, size : 100,
             query: {
                 match_all: {}
-            }
+            },
+            _source: ["Protocol", "Id"]
         }
     }).then(function (response) {
         var hits = response.hits.hits

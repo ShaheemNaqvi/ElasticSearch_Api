@@ -3,7 +3,7 @@ const ApiError = require('../error/ApiError');
 var client = require('../connection/connect');
 const FindRiskstatId = require('../Task/FindRiskstatId');
 const path = require('path');
-
+const search= require ('../models/search')
 const router = express.Router();
 
 const distPath = '/home/dpilab/api';
@@ -26,13 +26,11 @@ router.get('/', (req, res) => {
 router.get('/risk_stats/:id', FindRiskstatId )
 
 // route to protocol list
-router.get('v1/protocol', async (req, res) => {
-    const phraseSearch  = require('../Task/FindDocById');
-    const data = await phraseSearch( 'protocol_stats' , 'id');
-    res.json(data);
+router.get('/v1/protocol', async (req, res) => {
+  search.wildcard(req, res);
 });
 // route to protocol metadata
-router.get('v1/protocol/:id', async (req, res) => {
+router.get('/v1/protocol/:id', async (req, res) => {
     const phraseSearch  = require('../Task/FindDocById');
     const data = await phraseSearch( 'protocol_stats' , req.params.id);
     res.json(data);

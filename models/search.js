@@ -1,3 +1,4 @@
+//const { from } = require('undici/types/readable');
 var client = require('../connection/connect');
 
 const parseElasticResponse = (elasticResponse) => {
@@ -126,4 +127,89 @@ exports.matchall = async (req, res) =>{
             });
           }
       });
+};
+
+exports.wildcard = async (req, res) =>{
+  const searchText = req.query.q;
+  //console.log(`${searchText}`);
+  client.search({  
+      index: 'list-protocol',
+      type: '_doc',
+      body: {
+        query: {
+            wildcard : {
+                "Protocol" : {value:"*"}
+                }
+            },
+            _source: ["Protocol", "Id"],
+            //highlight: {fields : {"Protocol" : {}}},
+            from: 0,
+            size: 300,
+            sort: [],
+            aggs: {}
+        }
+    },function (error, resp,status) {
+        if (error){
+          console.log("search error: "+error)
+          return res.status(400).send({
+              message: `not found`
+         });
+        }
+        else {
+          search= resp;
+          console.log('Found response',search);
+          if(!search){
+              return res.status(400).send({
+                  message: 'search not found for id '
+              });
+          }
+          return res.status(200).json({
+              records: parseElasticResponse(search),
+          });
+        }
+    });
+};
+
+
+exports.querystring = async (req, res) =>{
+  const searchText = req.query.q;
+  //console.log(`${searchText}`);
+  client.search({  
+      index: req.param.index,
+      type: '_doc',
+      body: {
+        query: {
+            query_string : {
+                query : searchText
+                //fields : ["_source"]
+                }
+            },
+            //_source: ["Protocol", "Id"],
+            //highlight: {fields : {"Protocol" : {}}},
+            from: 0,
+            size: 10,
+            sort: [],
+            //aggs: {}
+        }
+    },function (error, resp,status) {
+        if (error){
+          console.log("search error: "+error)
+          return res.status(400).send({
+              message: `not found`
+         });
+        }
+        else {
+          search= resp;
+          console.log('Found response',search);
+          if(!search){
+              return res.status(400).send({
+                  message: 'search not found for id '
+              });
+          }
+          return res.status(200).json({
+              records: parseElasticResponse( search)
+          });
+        }
+    }
+    );
 };

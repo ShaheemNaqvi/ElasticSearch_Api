@@ -42,12 +42,25 @@ router.get('/msearch/:index', async (req, res) => {
    search.matchall(req, res);
 });
 
+
+//searching on query match all
+router.get('/wild', async (req, res) => {
+    search.wildcard(req, res);
+});
+
+router.get('/query/:index', async (req, res) => {
+    search.querystring(req, res);
+});
+
 //searching on query
 router.get('/:index', async (req, res) => {
     const { phraseSearch } = require('../Task/PhraseSearch');
     const data = await phraseSearch(req.params.index, req.query.q);
     res.json(data);
 });
+
+
+//searching on query match all
 
 
 module.exports =router;
