@@ -171,11 +171,11 @@ exports.wildcard = async (req, res) =>{
 };
 
 
-exports.querystring = async (req, res) =>{
+exports.querystring = async (req, res, _index) =>{
   const searchText = req.query.q;
-  //console.log(`${searchText}`);
+  //console.log(`${req.param.index}`);
   client.search({  
-      index: req.param.index,
+      index: _index,
       type: '_doc',
       body: {
         query: {
@@ -200,7 +200,7 @@ exports.querystring = async (req, res) =>{
         }
         else {
           search= resp;
-          console.log('Found response',search);
+          //console.log('Found response',search);
           if(!search){
               return res.status(400).send({
                   message: 'search not found for id '

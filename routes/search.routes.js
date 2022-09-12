@@ -49,7 +49,8 @@ router.get('/wild', async (req, res) => {
 });
 
 router.get('/query/:index', async (req, res) => {
-    search.querystring(req, res);
+    const _index = req.params.index;
+    search.querystring(req, res,_index);
 });
 
 //searching on query
