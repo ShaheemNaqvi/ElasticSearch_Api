@@ -35,6 +35,28 @@ router.get('/v1/protocol/:id', async (req, res) => {
     const data = await phraseSearch( 'protocol_stats' , req.params.id);
     res.json(data);
 });
+//list of subscribed protocol
+router.get('/v1/protocol/subscribed', async (req, res) => {
+  search.wildcard(req, res);
+});
+//list of dpi probes
+router.get('/v1/dpiprobelist', async (req, res) => {
+  search.wildcard(req, res);
+});
+//Get specific protocol data
+router.get('/v1/dpiprobe/protocol/:id', async (req, res) => {
+  search.wildcard(req, res);
+});
+//subscribe to specific protocol
+router.post('/v1/protocol', async (req, res) => {
+  search.wildcard(req, res);
+});
+//subscribe to specific protocol of specific probe
+router.post('/v1/probe/protocol', async (req, res) => {
+  search.wildcard(req, res);
+});
+
+
 //health
 router.get("/health", function (req, res) {
     client.cluster.health({},function(err,resp,status) {  
