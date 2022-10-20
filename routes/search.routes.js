@@ -2,9 +2,7 @@ const express = require('express');
 const ApiError = require('../error/ApiError');
 var client = require('../connection/connect');
 const getindicesData = require('../models/getIndexdata');
-const search= require ('../models/search')
-const path = require('path');
-const { request } = require('http');
+const search= require ('../models/search');
 
 const router = express.Router();
 
@@ -38,7 +36,7 @@ router.get('/ss/:index', async (req, res) => {
 });
 
 //searching on query match all
-router.get('/msearch/:index', async (req, res) => {
+router.get('/msearch', async (req, res) => {
    search.matchall(req, res);
 });
 
@@ -47,7 +45,7 @@ router.get('/msearch/:index', async (req, res) => {
 router.get('/wild', async (req, res) => {
     search.wildcard(req, res);
 });
-
+//http://localhost:6000/search/query/list-protocol?q=elkfilter
 router.get('/query/:index', async (req, res) => {
     const _index = req.params.index;
     search.querystring(req, res,_index);

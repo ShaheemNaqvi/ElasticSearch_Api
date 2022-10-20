@@ -6,14 +6,7 @@ const path = require('path');
 const search= require ('../models/search')
 const router = express.Router();
 
-const distPath = '/home/dpilab/api';
-
-
-const parseElasticResponse = (elasticResponse) => {
-    const responseHits = elasticResponse.hits.hits;
-    const result = responseHits.map((hit) => hit._source);
-    return result;
-  };
+//const distPath = '/home/dpilab/api';
 
 //home
 router.get('/', (req, res) => {
@@ -24,39 +17,6 @@ router.get('/', (req, res) => {
 });
 // route to risk
 router.get('/risk_stats/:id', FindRiskstatId )
-
-// route to protocol list
-router.get('/v1/protocol', async (req, res) => {
-  search.wildcard(req, res);
-});
-// route to protocol metadata
-router.get('/v1/protocol/:id', async (req, res) => {
-    const phraseSearch  = require('../Task/FindDocById');
-    const data = await phraseSearch( 'protocol_stats' , req.params.id);
-    res.json(data);
-});
-//list of subscribed protocol
-router.get('/v1/protocol/subscribed', async (req, res) => {
-  search.wildcard(req, res);
-});
-//list of dpi probes
-router.get('/v1/dpiprobelist', async (req, res) => {
-  search.wildcard(req, res);
-});
-//Get specific protocol data
-router.get('/v1/dpiprobe/protocol/:id', async (req, res) => {
-  search.wildcard(req, res);
-});
-//subscribe to specific protocol
-router.post('/v1/protocol', async (req, res) => {
-  search.wildcard(req, res);
-});
-//subscribe to specific protocol of specific probe
-router.post('/v1/probe/protocol', async (req, res) => {
-  search.wildcard(req, res);
-});
-
-
 //health
 router.get("/health", function (req, res) {
     client.cluster.health({},function(err,resp,status) {  

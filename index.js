@@ -9,6 +9,7 @@ const client =require('./connection/connect');
 const traffic_routes = require('./routes/traffic.routes');
 const protocol_routes = require('./routes/protocol.routes');
 const search_routes = require('./routes/search.routes');
+const v1_routes = require('./routes/v1.routes');
 
 //Paths
 const path = require('path');
@@ -27,7 +28,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 const server = require('http').createServer(app);
-
+app.use('/v1', v1_routes);
 app.use('/search', search_routes);
 app.use('/traffic_stats', traffic_routes);
 app.use('/protocol_stats', protocol_routes);
