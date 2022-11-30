@@ -1,8 +1,8 @@
 var elasticsearch = require('elasticsearch')
-
+require('dotenv').config()
 
 var client = new elasticsearch.Client({
-    hosts: ['https://elahd']
+    hosts: [process.env.URL]
 });
 
 
