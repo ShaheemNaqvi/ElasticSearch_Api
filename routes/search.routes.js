@@ -3,7 +3,6 @@ const ApiError = require('../error/ApiError');
 var client = require('../connection/connect');
 const getindicesData = require('../models/getIndexdata');
 const search= require ('../models/search');
-
 const router = express.Router();
 
 const parseElasticResponse = (elasticResponse) => {
@@ -40,7 +39,6 @@ router.get('/msearch', async (req, res) => {
    search.matchall(req, res);
 });
 
-
 //searching on query match all
 router.get('/wild', async (req, res) => {
     search.wildcard(req, res);
@@ -57,9 +55,5 @@ router.get('/:index', async (req, res) => {
     const data = await phraseSearch(req.params.index, req.query.q);
     res.json(data);
 });
-
-
-//searching on query match all
-
 
 module.exports =router;

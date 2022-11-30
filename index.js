@@ -10,6 +10,7 @@ const traffic_routes = require('./routes/traffic.routes');
 const protocol_routes = require('./routes/protocol.routes');
 const search_routes = require('./routes/search.routes');
 const v1_routes = require('./routes/v1.routes');
+require('dotenv').config()
 
 //Paths
 const path = require('path');
@@ -24,10 +25,8 @@ app.use(express.json());
 app.use(express.static(distPath))
 // To allow cross origin connections so that our webapp can connect to our server
 app.use(cors());
-app.use(bodyParser.urlencoded({
-    extended: true
-}))
-const server = require('http').createServer(app);
+app.use(bodyParser.urlencoded({ extended: true }))
+const server = require('https').createServer(app);
 app.use('/v1', v1_routes);
 app.use('/search', search_routes);
 app.use('/traffic_stats', traffic_routes);
@@ -52,13 +51,24 @@ app.get('*', (request, response) => {
         message:'default route'
     });
 });
-
+app.use((err, req, res, next) => {
+    res.status(err.status || 500)
+    res.send({
+      error: {
+        status: err.status || 500,
+        message: err.message,
+      },
+    })
+  })
 app.use(apiErrorHandler);
+
+const PORT = process.env.PORT || 1214
 server.on('listening',()=>{
     console.log('Server is running');
 });
-server.listen('6000');
-console.log('server running on localhost:6000')
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
 
 process.on('SIGINT', function() {
     console.log("\n Caught interrupt signal ---> client close");

@@ -20,15 +20,15 @@ router.get('/protocols', async (req, res) => {
   // route to protocol metadata
 router.get('/protocol', async (req, res) => {
     search.multisearch2(req, res);
-  });
+});
   //list of subscribed protocol
 router.get('/protocol/subscribed', async (req, res) => {
     search.wildcard(req, res);
-  });
+});
   //list of dpi probes
 router.get('/dpiprobelist', async (req, res) => {
     search.wildcard2(req, res);
-  });
+});
   //Get specific protocol data
 router.get('/dpiprobe/protocol', async (req, res) => {
     search.multisearch3(req, res);

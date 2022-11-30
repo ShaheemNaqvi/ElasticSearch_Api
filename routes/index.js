@@ -1,20 +1,25 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const ApiError = require('../error/ApiError');
 var client = require('../connection/connect');
 const FindRiskstatId = require('../Task/FindRiskstatId');
 const path = require('path');
 const search= require ('../models/search')
 const router = express.Router();
+const { verifyAccessToken } = require('../helpers/jwt_helper');
+const { appendFile } = require('fs');
+const jwt_helper = require('../helpers/jwt_helper');
 
 //const distPath = '/home/dpilab/api';
 
 //home
-router.get('/', (req, res) => {
+router.get('/', verifyAccessToken, async (req, res) => {
     //res.sendFile(path.join(distPath, 'home.html'))
     res.status(200).send({
       message:'api is working'
   });
 });
+
 // route to risk
 router.get('/risk_stats/:id', FindRiskstatId )
 //health

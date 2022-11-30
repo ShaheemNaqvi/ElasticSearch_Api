@@ -248,6 +248,8 @@ exports.multisearch2 = async (req, res) =>{
 
 exports.multisearch3 = async (req, res) =>{
     const searchText = req.query.q
+    const gt = req.query.gt
+    const lt = req.query.lt 
     client.search({  
         index: 'protocol_stats',
         type: '_doc',
@@ -265,8 +267,8 @@ exports.multisearch3 = async (req, res) =>{
                         range:{
                             timestamp:{
                                 format: "strict_date_optional_time",
-                                gte: "2021-10-20T14:25:27.528Z",
-                                lte: "2022-10-20T14:25:27.528Z"
+                                gte: gt.trim(),//"2021-10-1",
+                                lte: lt.trim() //"2022-10-19"
                             },
                         }
                     }]

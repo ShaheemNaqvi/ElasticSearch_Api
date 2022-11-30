@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "@elastic/elasticsearch": "^8.2.1",
+    "dotenv": "^16.0.3",
     "express": "^4.16.3",
+    "jsonwebtoken": "^8.5.1",
     "readable-stream": "^4.1.0",
     "undici": "^5.10.0"
   },
