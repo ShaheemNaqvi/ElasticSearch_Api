@@ -2,10 +2,8 @@ var elasticsearch = require('elasticsearch')
 
 
 var client = new elasticsearch.Client({
-    hosts: ['https://']
+    hosts: ['https://elahd']
 });
-
-// 192.168.122.42
 
 
 module.exports = client
