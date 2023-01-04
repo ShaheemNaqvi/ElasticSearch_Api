@@ -1,4 +1,3 @@
-//const { from } = require('undici/types/readable');
 var client = require('../connection/connect');
 
 const parseElasticResponse = (elasticResponse) => {
@@ -168,104 +167,27 @@ exports.wildcard = async (req, res) =>{
     });
 };
 
-exports.wildcard2 = async (req, res) =>{
-    const searchText = req.query.q;
-    //console.log(`${searchText}`);
-    client.search({  
-        index: 'list-protocol',
-        type: '_doc',
-        body: {
-          query: {
-              wildcard : {
-                  "host" : {value:"*"}
-                  }
-              },
-              _source: ["host"],
-              //highlight: {fields : {"Protocol" : {}}},
-              from: 0,
-              size: 1,
-              sort: [],
-              aggs: {}
-          }
-      },function (error, resp,status) {
-          if (error){
-            console.log("search error: "+error)
-            return res.status(400).send({
-                message: `not found`
-           });
-          }
-          else {
-            search= resp;
-            console.log('Found response',search);
-            if(!search){
-                return res.status(400).send({
-                    message: 'search not found for id '
-                });
-            }
-            return res.status(200).json({
-                records: parseElasticResponse(search),
-            });
-          }
-      });
-};
-
-exports.multisearch2 = async (req, res) =>{
-    const searchText = req.query.q
-    client.search({  
-        index: 'protocol_stats',
-        type: '_doc',
-        body: {
-          query: {
-            multi_match : {
-                query:    searchText.trim(), 
-                fields: [ " protocol","msg"],
-                type : "phrase_prefix" 
-            }
-          },
-          _source : ["msg"]
-        }
-      },function (error, resp,status) {
-          if (error){
-            console.log("search error: "+error)
-            return res.status(400).send({
-                message: `not found`
-           });
-          }
-          else {
-            search= resp;
-            console.log('Found response',search);
-            if(!search){
-                return res.status(400).send({
-                    message: 'search not found for id '
-                });
-            }
-            return res.status(200).json({
-                records: parseElasticResponse(search),
-            });
-          }
-      });
-};
 
 exports.multisearch3 = async (req, res) =>{
     const searchText = req.query.q
     const gt = req.query.gt
     const lt = req.query.lt 
     client.search({  
-        index: 'protocol_stats',
-        type: '_doc',
+        index: 'network_stats',
+        //type: '_doc',
         body: {
           query: {
                 bool:{
                     must:{
                         multi_match : {
                             query:    searchText.trim(), 
-                            fields: [ " protocol","msg"],
+                            fields: [ "L7_Proto_namel","L4_Proto_name"],
                             type : "phrase_prefix" 
                         }
                     },
                     filter:[{
                         range:{
-                            timestamp:{
+                            Timestamp:{
                                 format: "strict_date_optional_time",
                                 gte: gt.trim(),//"2021-10-1",
                                 lte: lt.trim() //"2022-10-19"
@@ -297,12 +219,12 @@ exports.multisearch3 = async (req, res) =>{
       });
 };
 
-exports.querystring = async (req, res, _index) =>{
+exports.querystring = async (req, res) =>{
   const searchText = req.query.q;
   //console.log(`${req.param.index}`);
   client.search({  
-      index: _index,
-      type: '_doc',
+      index: 'network_stats',
+      //type: '_doc',
       body: {
         query: {
             query_string : {

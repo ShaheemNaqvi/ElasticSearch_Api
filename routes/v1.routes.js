@@ -1,8 +1,6 @@
 const express = require('express');
-const ApiError = require('../error/ApiError');
-var client = require('../connection/connect');
 const search= require ('../models/search');
-
+const v1= require ('../models/v1');
 const router = express.Router();
 
 const parseElasticResponse = (elasticResponse) => {
@@ -11,35 +9,26 @@ const parseElasticResponse = (elasticResponse) => {
     const result = responseHits.map((hit) => hit._source);
     return result;
 };
-
 //v1 routes
-// route to protocol list
-router.get('/protocols', async (req, res) => {
-    search.wildcard(req, res);
+// route to l7 protocol list
+router.get('/l7protocol', async (req, res) => {
+    v1.L7protocol(req, res);
 });
-  // route to protocol metadata
-router.get('/protocol', async (req, res) => {
-    search.multisearch2(req, res);
+
+// route to l4 protocol list
+router.get('/l4protocol', async (req, res) => {
+    v1.L4protocol(req, res);
 });
-  //list of subscribed protocol
-router.get('/protocol/subscribed', async (req, res) => {
-    search.wildcard(req, res);
+// route to protocol metadata
+//v1/protocolmeta:q=ssh
+router.get('/protocolmeta', async (req, res) => {
+    v1.protometa(req, res);
 });
-  //list of dpi probes
-router.get('/dpiprobelist', async (req, res) => {
-    search.wildcard2(req, res);
-});
-  //Get specific protocol data
+
+//Get specific protocol data
+//http://localhost:1214/v1/dpiprobe/protocol?q=YouTubeUpload&gt=2021-10-1&lt=2022-10-20
 router.get('/dpiprobe/protocol', async (req, res) => {
     search.multisearch3(req, res);
-});
-  //subscribe to specific protocol
-router.post('/protocol', async (req, res) => {
-    //search.wildcard(req, res);
-});
-  //subscribe to specific protocol of specific probe
-router.post('/probe/protocol', async (req, res) => {
-    //search.wildcard(req, res);
 });
 
 module.exports =router;
