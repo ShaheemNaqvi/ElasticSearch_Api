@@ -11,7 +11,7 @@
   "author": "ShaheemNaqvi",
   "license": "ISC",
   "dependencies": {
-    "@elastic/elasticsearch": "^8.5.0",
+    "@elastic/elasticsearch": "^8.9.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "elasticsearch": "^16.7.3",
